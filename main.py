@@ -13,8 +13,8 @@ def caminho_arquivo(rel_path):
     return os.path.join(base_path, rel_path)
 
 # Dados globais
-ingredientes_possiveis = ['Raiz Mágica', 'Líquido da Lua', 'Pó de Fada', 'Flor Enfeitiçada']
-ordem_correta = random.sample(ingredientes_possiveis, 4)
+
+
 tentativas = 0
 max_tentativas = 6
 tempo_inicio = None
@@ -22,6 +22,8 @@ tempo_pausado = 0
 jogador_nome = ""
 melhores_tempos = {}
 jogo_pausado = False
+jogo_finalizado = False
+ingredientes_possiveis=[]
 
 
 # Janela
@@ -39,12 +41,15 @@ tempo_var = tk.StringVar()
 tentativas_var = tk.StringVar()
 resultado_var = tk.StringVar()
 melhor_tempo_var = tk.StringVar()
-dificuldade = tk.StringVar(value="Fácil")
+dificuldade = tk.StringVar(value="Escolha a dificuldade")
 # Containers
 frame_inicio = tk.Frame(janela)
 frame_instrucao = tk.Frame(janela)
 frame_jogo = tk.Frame(janela)
 frame_pause = tk.Frame(janela)
+
+variaveis_dropdowns = []
+dropdowns = []
 
 # ===== TELA INICIAL =====
 def mostrar_tela_instrucao():
@@ -58,17 +63,24 @@ frame_inicio.pack()
 # ===== TELA DE INSTRUÇÕES =====
 nome_entry = tk.Entry(frame_instrucao)
 
+descricao_dificuldade_var = tk.StringVar()
+descricao_dificuldade_var.set("Selecione uma dificuldade.")
+
 def atualizar_descricao_dificuldade(*args):
     nivel = dificuldade.get()
     if nivel == "Fácil":
-        descricao_dificuldade_var=("🟢 Fácil: 7 ingredientes disponíveis e 3 espaços para a poção. Você tem 10 tentativas.")
+        descricao_dificuldade_var.set("🟢 Fácil: 3 ingredientes disponíveis e 3 espaços para a poção. Você tem 10 tentativas.")
     elif nivel == "Média":
-        descricao_dificuldade_var=("🟡 Médio: 7 ingredientes disponíveis e 3 espaços para a poção. Você tem 7 tentativas.")
+        descricao_dificuldade_var.set("🟡 Médio: 4 ingredientes disponíveis e 4 espaços para a poção. Você tem 7 tentativas.")
     elif nivel == "Difícil":
-        descricao_dificuldade_var=("🔴 Difícil: 7 ingredientes disponíveis e 5 espaços para a poção. Você tem 5 tentativas.")
-
+        descricao_dificuldade_var.set("🔴 Difícil: 5 ingredientes disponíveis e 5 espaços para a poção. Você tem 5 tentativas.")
+    else:
+        descricao_dificuldade_var.set("Selecione uma dificuldade.")
 def iniciar_jogo():
-    global jogador_nome, tempo_inicio, tentativas, ordem_correta, ingredientes_possiveis, max_tentativas
+    global jogador_nome, tempo_inicio, tentativas, ordem_correta, ingredientes_possiveis, max_tentativas,combinacoes_possiveis,jogo_ativo,jogo_finalizado,jogo_pausado
+    jogo_ativo = True
+    jogo_finalizado = False
+    jogo_pausado = False
     jogador_nome = nome_entry.get().strip()
     if not jogador_nome:
         messagebox.showwarning("Nome obrigatório", "Digite seu nome antes de começar.")
@@ -77,33 +89,46 @@ def iniciar_jogo():
     # Ajustar a dificuldade
     if dificuldade.get() == "Fácil":
         combinacoes_possiveis = 3
-        ingredientes_possiveis = ['Raiz Mágica', 'Líquido da Lua', 'Pó de Fada']
+        ingredientes_possiveis = ['Sangue de Barata', 'Pó de Fada', 'Dente de Morcego']
         ordem_correta = random.sample(ingredientes_possiveis, combinacoes_possiveis)  # 3 combinações
         max_tentativas = 10  # 10 tentativas
     elif dificuldade.get() == "Média":
         combinacoes_possiveis = 4
-        ingredientes_possiveis = ['Raiz Mágica', 'Líquido da Lua', 'Pó de Fada', 'Flor Enfeitiçada']
+        ingredientes_possiveis = ['Sangue de Barata', 'Pó de Fada', 'Dente de Morcego', 'Baba de Dragão']
         ordem_correta = random.sample(ingredientes_possiveis, combinacoes_possiveis)  # 4 combinações
         max_tentativas = 7  # 7 tentativas
     elif dificuldade.get() == "Difícil":
         combinacoes_possiveis = 5
-        ingredientes_possiveis = ['Raiz Mágica', 'Líquido da Lua', 'Pó de Fada', 'Flor Enfeitiçada', 'Pó de Estrela']
+        ingredientes_possiveis = ['Sangue de Barata', 'Pó de Fada', 'Dente de Morcego', 'Baba de Dragão', 'Raiz Mágica']
         ordem_correta = random.sample(ingredientes_possiveis, combinacoes_possiveis)  # 5 combinações
         max_tentativas = 5  # 5 tentativas
 
+        
     tentativas = 0
     tempo_inicio = time.time()
+    
     tentativas_var.set(f"🎯 Tentativas: 0/{max_tentativas}")
     resultado_var.set("")
     melhor_tempo_var.set(f"🏆 Melhor tempo: {carregar_melhor_tempo(jogador_nome)} segundos")
     atualizar_caldeirao()
-    var1.set(ingredientes_possiveis[0])
-    var2.set(ingredientes_possiveis[1])
-    var3.set(ingredientes_possiveis[2])
-    var4.set(ingredientes_possiveis[3])
+    
+    for dropdown in dropdowns:
+        dropdown.destroy()
+    variaveis_dropdowns.clear()
+    dropdowns.clear()
+
     frame_instrucao.pack_forget()
     frame_jogo.pack()
     atualizar_tempo()
+    
+    for i in range(combinacoes_possiveis):
+        var = tk.StringVar()
+        var.set(ingredientes_possiveis[i % len(ingredientes_possiveis)])
+        variaveis_dropdowns.append(var)
+
+        menu = tk.OptionMenu(frame_jogo, var, *ingredientes_possiveis)
+        menu.pack()
+        dropdowns.append(menu)
 
 tk.Label(frame_instrucao, text="📜 Instruções:", font=("Arial", 14)).pack(pady=10)
 tk.Label(frame_instrucao, text="Descubra a combinação correta de ingredientes mágicos!").pack(pady=5)
@@ -111,8 +136,8 @@ tk.Label(frame_instrucao, text="Digite seu nome:").pack(pady=5)
 nome_entry.pack(pady=5)
 
 tk.Label(frame_instrucao, text="Escolha a dificuldade:").pack(pady=5)
-tk.OptionMenu(frame_instrucao, dificuldade, "Fácil", "Média", "Difícil").pack(pady=5)
-
+tk.OptionMenu(frame_instrucao, dificuldade, "Fácil", "Média", "Difícil", command=atualizar_descricao_dificuldade).pack(pady=5)
+tk.Label(frame_instrucao, textvariable=descricao_dificuldade_var, wraplength=300).pack(pady=5)
 tk.Button(frame_instrucao, text="Começar", command=iniciar_jogo).pack(pady=10)
 
 # ===== TELA DE PAUSE =====
@@ -132,16 +157,25 @@ def continuar_jogo():
     frame_pause.place_forget()
     desabilitar_interacao(False)
 
+def reiniciar_jogo():
+    global jogo_pausado, tempo_inicio, jogo_ativo
+    delta = time.time() - tempo_pausado
+    tempo_inicio += delta
+    frame_pause.place_forget()
+    desabilitar_interacao(False)
+    iniciar_jogo()
+    
 def sair_jogo():
     janela.destroy()
 
 tk.Label(frame_pause, text="⏸️ Jogo pausado", font=("Arial", 16)).pack(pady=10)
 tk.Button(frame_pause, text="Continuar", command=continuar_jogo).pack(pady=5)
 tk.Button(frame_pause, text="Sair", command=sair_jogo).pack(pady=5)
+tk.Button(frame_pause, text="Reiniciar", command=reiniciar_jogo).pack(pady=5)
 
 # ===== TELA DO JOGO =====
 def atualizar_tempo():
-    if not jogo_pausado and frame_jogo.winfo_ismapped():
+    if not jogo_pausado and not jogo_finalizado and frame_jogo.winfo_ismapped():
         tempo_decorrido = int(time.time() - tempo_inicio)
         minutos = tempo_decorrido // 60
         segundos = tempo_decorrido % 60
@@ -150,7 +184,7 @@ def atualizar_tempo():
 
 def desabilitar_interacao(status):
     estado = "disabled" if status else "normal"
-    for widget in [dropdown1, dropdown2, dropdown3, dropdown4, botao_misturar]:
+    for widget in dropdowns + [botao_misturar]:
         widget.config(state=estado)
 
 def atualizar_caldeirao(status="erro"):
@@ -170,24 +204,29 @@ def atualizar_caldeirao(status="erro"):
         caldeirao_label.image = imagem_tk
         
 def verificar_combinação():
-    global tentativas
-    if tentativas >= max_tentativas or jogo_pausado:
+    global tentativas,tempo_inicio, tempo_pausado, jogo_ativo, jogo_finalizado
+    if tentativas >= max_tentativas or jogo_pausado or jogo_finalizado:
         return
 
-    tentativa = [var1.get(), var2.get(), var3.get(), var4.get()]
+    tentativa = [var.get() for var in variaveis_dropdowns]
+
     tentativas += 1
     tentativas_var.set(f"🎯 Tentativas: {tentativas}/{max_tentativas}")
 
-    corretos = sum(tentativa[i] == ordem_correta[i] for i in range(4))
+    corretos = sum(tentativa[i] == ordem_correta[i] for i in range(len(ordem_correta)))
     presentes = sum(i in ordem_correta for i in tentativa)
 
     if tentativa == ordem_correta:
+        jogo_finalizado = True
         tempo_total = int(time.time() - tempo_inicio)
         resultado_var.set(f"✨ Você criou a poção perfeita em {tempo_total} segundos!")
         atualizar_caldeirao("vitoria")
         salvar_melhor_tempo(tempo_total)
         if messagebox.askyesno("Parabéns!", "Deseja jogar novamente?"):
             iniciar_jogo()
+        else:
+            jogo_ativo=False
+            tempo_pausado=time.time() - tempo_inicio
     else:
         reacoes = [
             "Mistura muito instável!",
@@ -202,26 +241,14 @@ def verificar_combinação():
         if tentativas == max_tentativas:
             resultado_var.set("💥 O caldeirão explodiu!")
             atualizar_caldeirao("perdeu")
+            jogo_ativo = False  # Congelar o tempo
+            jogo_finalizado=True
+            tempo_pausado = time.time() - tempo_inicio  # Armazenar tempo final
             if messagebox.askyesno("Game Over", "Deseja tentar novamente?"):
                 iniciar_jogo()
+                
 
 # Dropdowns
-
-var1 = tk.StringVar()
-var2 = tk.StringVar()
-var3 = tk.StringVar()
-var4 = tk.StringVar()
-
-dropdown1 = tk.OptionMenu(frame_jogo, var1, *ingredientes_possiveis)
-dropdown2 = tk.OptionMenu(frame_jogo, var2, *ingredientes_possiveis)
-dropdown3 = tk.OptionMenu(frame_jogo, var3, *ingredientes_possiveis)
-dropdown4 = tk.OptionMenu(frame_jogo, var4, *ingredientes_possiveis)
-
-tk.Label(frame_jogo, text="Escolha os ingredientes na ordem correta:").pack(pady=5)
-dropdown1.pack()
-dropdown2.pack()
-dropdown3.pack()
-dropdown4.pack()
 
 botao_misturar = tk.Button(frame_jogo, text="Misturar!", command=verificar_combinação)
 botao_misturar.pack(pady=10)
@@ -233,6 +260,8 @@ tk.Label(frame_jogo, textvariable=melhor_tempo_var, fg="orange").pack()
 
 caldeirao_label = tk.Label(frame_jogo)
 caldeirao_label.pack(pady=10)
+
+
 
 # ===== SALVAR TEMPO =====
 def salvar_melhor_tempo(novo_tempo):
