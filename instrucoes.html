@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      background-image: url("imagens/tela_instrucao.png");
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      margin: 0;
+      height: 100vh;
+      background-repeat: no-repeat;   /* Evita repetição */
+      background-position: center;    /* Centraliza a imagem */
+      background-attachment: fixed;   /* (opcional) Fixa a imagem no fundo */
+      font-family: 'Montserrat', sans-serif;
+    }
+    #botao-seta {
+      width: 120px;
+      margin-top:49%;
+      margin-left: 77%;
+      cursor: pointer;
+    }
+    #tela-lobby {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #botao-seta:hover {
+      transform: scale(1.05); /* E isso dá um leve efeito ao passar o mouse */
+    }
+  </style>
+</head>
+
+<body>
+  <div id="tela-lobby" class="tela" >
+    <img src="imagens/botao_seta.png" alt="Jogar" id="botao-seta">
+  </div>
+
+
+
+  <script>
+    // Quando o botão for clicado
+    document.getElementById("botao-seta").onclick = function () {
+    window.location.href = "dificuldade_nome.html";
+    // Exemplo: trocar de tela, carregar outro conteúdo etc.
+    };
+</script>
+</body>
+</html>

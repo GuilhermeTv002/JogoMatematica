@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-image: url("imagens/tela_dificuldade_nome.png");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+    }
+
+    .botoes-dificuldade {
+      text-align: center;
+      margin-top: 100px;
+      -webkit-text-stroke: 2px white;
+      color: transparent;
+    }
+
+    .botao-dificuldade {
+      font-size: 65px;
+      padding: 10px 20px;
+      margin: 0 10px;
+      background-color: transparent;
+      color: transparent;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+    }
+
+    .botao-dificuldade.ativo {
+      color: white;
+    }
+
+    #botao-seta {
+      width: 120px;
+      margin-top: 49%;
+      margin-left: 77%;
+      cursor: pointer;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    #tela-lobby {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    #container {
+      color: white;
+      text-align: center;
+      font-size: 50px;
+      width: 100%;
+      margin: 0;
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    #dificuldade-texto {
+      margin-top: 20px;
+      font-size: 24px;
+      color: white;
+    }
+
+    #input_nome {
+      margin-top: 100px;
+      font-size: 57px;
+      text-align: center;
+      background-color: #380f7d;
+      border: none;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    #input_nome::placeholder {
+      color: white;
+    }
+
+    #input_nome:focus {
+      outline: none;
+      border: none;
+    }
+
+    #botao-seta:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="container">
+    <h1 style="font-weight: 700;">DIFICULDADE</h1>
+    <div class="botoes-dificuldade">
+      <button class="botao-dificuldade" onclick="selecionarDificuldade(this, 'Fácil: Um modo tranquilo para começar.', 'facil')">FÁCIL</button>
+      <button class="botao-dificuldade" onclick="selecionarDificuldade(this, 'Médio: Um desafio moderado para testar suas habilidades.', 'medio')">MÉDIO</button>
+      <button class="botao-dificuldade" onclick="selecionarDificuldade(this, 'Difícil: Para os mais corajosos e experientes.', 'dificil')">DIFÍCIL</button>
+    </div>
+
+    <div id="dificuldade-texto">Escolha uma dificuldade!</div>
+
+    <input type="text" id="input_nome" autocomplete="off"
+           placeholder="DIGITE SEU NOME"
+           oninput="verificarFormulario()"
+           onfocus="this.placeholder=''"
+           onblur="if(this.value===''){this.placeholder='DIGITE SEU NOME'}">
+  </div>
+
+  <div id="tela-lobby" class="tela">
+    <img src="imagens/botao_seta.png" alt="Jogar" id="botao-seta">
+  </div>
+
+  <script>
+    let nome = "";
+    let dificuldadeSelecionada = "";
+    let dificuldadeValor = "";
+
+    function verificarFormulario() {
+      nome = document.getElementById('input_nome').value.trim();
+
+      if (nome !== "" && dificuldadeValor !== "") {
+        document.getElementById("botao-seta").style.opacity = 1;
+        document.getElementById("botao-seta").style.pointerEvents = "auto";
+      } else {
+        document.getElementById("botao-seta").style.opacity = 0.5;
+        document.getElementById("botao-seta").style.pointerEvents = "none";
+      }
+    }
+
+    function selecionarDificuldade(botaoClicado, textoDificuldade, valorDificuldade) {
+      const botoes = document.querySelectorAll('.botao-dificuldade');
+      botoes.forEach(botao => botao.classList.remove('ativo'));
+      botaoClicado.classList.add('ativo');
+
+      document.getElementById('dificuldade-texto').innerText = textoDificuldade;
+      dificuldadeSelecionada = textoDificuldade;
+      dificuldadeValor = valorDificuldade;
+
+      verificarFormulario();
+    }
+
+    document.getElementById("botao-seta").onclick = function () {
+      if (nome !== "" && dificuldadeValor !== "") {
+        if (dificuldadeValor === "facil") {
+          window.location.href = "alquimia_suprema_facil.html";
+        } else if (dificuldadeValor === "medio") {
+          window.location.href = "alquimia_suprema_medio.html";
+        } else if (dificuldadeValor === "dificil") {
+          window.location.href = "alquimia_suprema_dificil.html";
+        }
+      }
+    };
+  </script>
+
+</body>
+</html>

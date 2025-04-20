@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      background-image: url("imagens/tela_padrao.png");
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+    }
+
+    #tela-lobby {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #botao-jogar {
+      width: 400px;
+      margin-bottom: 110px;
+      cursor: pointer;
+      
+    }
+    #botao-jogar:hover {
+      transform: scale(1.05); /* E isso dá um leve efeito ao passar o mouse */
+    }
+  </style>
+</head>
+<body>
+  <div id="tela-lobby" class="tela" alin>
+    <img src="imagens/botao_jogar_lobby.png" alt="Jogar" id="botao-jogar">
+  </div>
+
+
+
+
+<script>
+   // Quando o botão for clicado
+  document.getElementById("botao-jogar").onclick = function () {
+  window.location.href = "instrucoes.html";
+      // Exemplo: trocar de tela, carregar outro conteúdo etc.
+    };
+</script>
+</body>
+</html>

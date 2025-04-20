@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <header>
+
+    <div id="contador_tempo">00:00</div>
+    <h1 id="contador_tentativas"></h1>
+
+  </header>
+
+
+  <script>
+
+  let segundos = 0;
+
+  function atualizarContador() {
+    segundos++;
+
+    const minutos = Math.floor(segundos/60);
+    const segundosRestantes = segundos%60;
+
+    const formatoMinutos = minutos.toString().padStart(2, '0');
+    const formatoSegundos = segundosRestantes.toString().padStart(2, '0');
+
+    document.getElementById("contador_tempo").innerText = `${formatoMinutos}:${formatoSegundos}`;
+  }
+
+  setInterval(atualizarContador, 1000);
+
+
+
+  </script>
+
+</body>
+</html>
