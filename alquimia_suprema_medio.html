@@ -1,0 +1,444 @@
+<!-- Salve como tela_dificil.html ou semelhante -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alquimia Suprema - Difícil</title>
+  <style>
+    /* Estilos mantidos com acréscimos para o 4º ingrediente */
+    #luz1,#luz2,#luz3,#luz4{
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      top: 0;
+      left: 0;
+    }
+    #img1,#img2,#img3,#img4{
+      width: 320px;  
+      z-index: 10;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      cursor: pointer;
+    }
+    #op1_luz,#op2_luz,#op3_luz,#op4_luz{
+      position: absolute;
+      width: 360px;
+    
+    }
+    #op1_luz{
+      left: 170px ;
+    }
+    #op2_luz{
+      top: 10px ;
+      left: 30% ;
+    }
+    #op3_luz{
+      top: 10px ;
+      right: 30% ;
+    }
+    #op4_luz{
+      right: 170px ;
+    }
+    #botao_misturar{
+      width: 600px;
+      cursor: pointer;
+    }
+    #div_botao_msturar{
+      display: flex;
+      flex-flow: column;
+      position: absolute;
+      bottom: 500px;
+      left:35%;
+     
+    }
+    body {
+      background-image: url("imagens/tela_facil.png");
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+    }
+
+    #div_header {
+      display: flex;
+      justify-content: space-between;
+      color: white;
+      margin-left: 8%;
+      margin-right: 8%;
+    }
+
+    .imagem-principal {
+      width: 260px;
+      cursor: pointer;
+      margin: 20px;
+    }
+
+    #container_principal {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    #op1, #op2, #op3, #op4 {
+      position: absolute;
+      width: 195px;
+      height: 195px;
+    } 
+
+    #op1 {
+      top: 750px;
+      left: 210px;
+    }
+
+    #op2 {
+      top: 850px;
+      left: 400px;
+    }
+
+    #op3 {
+      top: 850px;
+      right: 400px;
+    }
+    #op4 {
+      top: 750px;
+      right: 210px;
+    }
+
+    #op1_bolha, #op2_bolha, #op3_bolha, #op4_bolha {
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    #op1_ingrediente, #op2_ingrediente, #op3_ingrediente, #op4_ingrediente {
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+    }
+
+    #mensagem_aviso {
+      position: fixed;
+      top: 75%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color:rgba(139, 93, 216, 0.73);
+      color: white;
+      padding: 30px 40px;
+      border-radius: 50px;
+      border-color: black;
+      z-index: 9999;
+      text-align: center;
+      box-shadow: 0 0 15px #000;
+      border: 9px solid black;
+    }
+
+    #mensagem_aviso p {
+      opacity: 1;
+      font-size: 40px;
+      margin: 0;
+      color: white;
+    }
+
+    #opcoes img.transparente {
+      opacity: 0.5;
+    }
+    @keyframes curva-para-caldeirao-esquerda {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        transform: translate(-420px, 100px) rotate(20deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-600px, 500px) scale(0.2);
+        opacity: 0;
+      }
+    }
+
+    @keyframes curva-para-caldeirao-meio-direita {
+      0% {
+        transform: translate(0, 0);
+        opacity: 1;
+      }
+      50% {
+        transform: translate(150px, 150px);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(150px, 500px) scale(0.2);
+        opacity: 0;
+      }
+    }
+    @keyframes curva-para-caldeirao-meio-esquerda {
+      0% {
+        transform: translate(0, 0);
+        opacity: 1;
+      }
+      50% {
+        transform: translate(-150px, 150px);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-150px, 500px) scale(0.2);
+        opacity: 0;
+      }
+    }
+
+    @keyframes curva-para-caldeirao-direita {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        transform: translate(420px, 100px) rotate(-10deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(600px, 500px) scale(0.2);
+        opacity: 0;
+      }
+    }
+    .curva-esquerda {
+      animation: curva-para-caldeirao-esquerda 1.2s forwards ease-in-out;
+    }
+    .curva-meio-esquerda {
+      animation: curva-para-caldeirao-meio-esquerda 1.2s forwards ease-in-out;
+    } 
+    .curva-meio-direita {
+      animation: curva-para-caldeirao-meio-direita 1.2s forwards ease-in-out;
+    } 
+    .curva-direita {
+      animation: curva-para-caldeirao-direita 1.2s forwards ease-in-out;
+    } 
+
+    .curva-esquerda, .curva-meio-direita,.curva-meio-esquerda, .curva-direita {
+      animation-duration: 1.2s;
+      animation-fill-mode: forwards;
+      animation-timing-function: ease-in-out;
+      z-index: 100;
+      position: relative;
+    }
+
+
+
+    /* O resto do CSS você pode manter da versão fácil */
+  </style>
+</head>
+  <header>
+    <button onclick="simularVitoria()" style="
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          z-index: 9999;
+          padding: 10px 20px;
+          font-size: 18px;
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          border-radius: 10px;
+          cursor: pointer;
+        ">
+          ⚙️ Testar Vitória
+        </button>
+    <body>
+      <div id="div_header">
+        <h1 id="contador_tentativas">TENTATIVAS 0/7</h1>
+        <h1 id="contador_tempo">TEMPO 00:00</h1>
+      </div>
+
+      <div id="container_principal">
+        <div id="op1_luz">
+          <img src="imagens/luz.png" id="luz1">
+          <img id="img1" class="imagem-principal" src="imagens/item_inicial.png">
+        </div>
+
+        <div id="op2_luz">
+          <img src="imagens/luz.png" id="luz2">
+          <img id="img2" class="imagem-principal" src="imagens/item_inicial.png">
+        </div>
+
+        <div id="op3_luz">
+          <img src="imagens/luz.png" id="luz3">
+          <img id="img3" class="imagem-principal" src="imagens/item_inicial.png">
+        </div>
+
+        <div id="op4_luz">
+          <img src="imagens/luz.png" id="luz4">
+          <img id="img4" class="imagem-principal" src="imagens/item_inicial.png">
+        </div>
+      </div>
+
+      <div id="opcoes">
+        <div id="op1">
+          <img src="imagens/bolha.png"alt="Bolha" id="op1_bolha">
+          <img src="imagens/frasco_dente_de_morcego.png" onclick="selecionarIngrediente(this)"id="op1_ingrediente">
+        </div>
+
+        <div id="op2">
+          <img src="imagens/bolha.png"alt="Bolha" id="op2_bolha">
+          <img src="imagens/frasco_po_de_fada.png" onclick="selecionarIngrediente(this)"id="op2_ingrediente">
+        </div>
+
+        <div id="op3">
+          <img src="imagens/bolha.png"alt="Bolha" id="op3_bolha">
+          <img src="imagens/frasco_sangue_de_barata.png" onclick="selecionarIngrediente(this)"id="op3_ingrediente">
+        </div>
+
+        <div id="op4">
+          <img src="imagens/bolha.png"alt="Bolha" id="op4_bolha">
+          <img src="imagens/frasco_raiz_magica.png" onclick="selecionarIngrediente(this)"id="op4_ingrediente">
+        </div>
+      </div>
+
+      <div id="div_botao_msturar">
+        <img src="imagens/botao_misturar.png" onclick="verificarOrdemSePossivel()" id="botao_misturar">
+      </div>
+
+      <div id="mensagem_aviso" style="display:none;">
+        <p id="mensagem_texto"></p>
+      </div>
+  </header>
+  <script>
+    let segundos = 0;
+    let tentativasTotais = 0;
+    let imagemSelecionada = null;
+    let tentaivas = 7;
+
+    function verificarOrdemSePossivel() {
+      const aviso = document.getElementById("mensagem_aviso");
+      if (aviso.style.display === "none") {
+        verificarOrdem();
+      }
+    }
+    const ingredientesDisponiveis = [
+      "imagens/frasco_dente_de_morcego.png",
+      "imagens/frasco_po_de_fada.png",
+      "imagens/frasco_sangue_de_barata.png",
+      "imagens/frasco_raiz_magica.png"
+    ];
+
+    let ordemCorreta = [];
+
+    function atualizarContador() {
+      segundos++;
+      const minutos = Math.floor(segundos / 60);
+      const segundosRestantes = segundos % 60;
+      const formatoMinutos = minutos.toString().padStart(2, "0");
+      const formatoSegundos = segundosRestantes.toString().padStart(2, "0");
+      document.getElementById("contador_tempo").innerText = `TEMPO ${formatoMinutos}:${formatoSegundos}`;
+    }
+    setInterval(atualizarContador, 1000);
+
+    function gerarOrdemCorreta() {
+      ordemCorreta = [...ingredientesDisponiveis].sort(() => Math.random() - 0.5);
+      console.log("Ordem correta:", ordemCorreta); // para teste
+    }
+    gerarOrdemCorreta();
+
+    function selecionarIngrediente(imagemClicada) {
+      document.querySelectorAll("#opcoes img").forEach(img => img.classList.remove("transparente"));
+      imagemSelecionada = imagemClicada;
+      imagemSelecionada.classList.add("transparente");
+
+      const imagensPrincipais = document.querySelectorAll(".imagem-principal");
+      imagensPrincipais.forEach(img => {
+        img.onclick = function () {
+          if (imagemSelecionada) {
+            img.src = imagemSelecionada.src;
+            imagemSelecionada.classList.remove("transparente");
+            imagemSelecionada = null;
+            imagensPrincipais.forEach(i => i.onclick = null);
+          }
+        };
+      });
+
+      document.getElementById("mensagem_aviso").style.display = "none"; // esconde aviso ao clicar
+    }
+
+    function mostrarAviso(texto) {
+      const aviso = document.getElementById("mensagem_aviso");
+      const textoElemento = document.getElementById("mensagem_texto");
+      textoElemento.innerText = texto;
+      aviso.style.display = "block";
+    }
+
+    function bloquearJogo() {
+      const imagensPrincipais = document.querySelectorAll(".imagem-principal");
+      imagensPrincipais.forEach(img => img.onclick = null);
+      document.querySelectorAll("#opcoes img").forEach(img => img.onclick = null);
+
+      const botaoMisturar = document.getElementById("botao_misturar");
+      botaoMisturar.onclick = null; // Desativa o botão
+      botaoMisturar.style.cursor = "not-allowed"; // Visual: cursor proibido
+    }
+    function simularVitoria() {
+      document.getElementById("op1_luz").classList.add("curva-direita");
+      document.getElementById("op2_luz").classList.add("curva-meio-direita");
+      document.getElementById("op3_luz").classList.add("curva-meio-esquerda");
+      document.getElementById("op4_luz").classList.add("curva-esquerda");
+      bloquearJogo();
+
+      setTimeout(function() {
+        window.location.href = 'vitoria.html';
+      }, 1200); // Redireciona após 1.2 segundos (tempo da animação)
+    }
+    
+    function verificarOrdem() {
+      const atuais = [
+        document.getElementById("img1").src,
+        document.getElementById("img2").src,
+        document.getElementById("img3").src,
+        document.getElementById("img4").src
+      ];
+
+      let corretos = 0;
+      for (let i = 0; i < ordemCorreta.length; i++) {
+        if (atuais[i].includes(ordemCorreta[i])) {
+          corretos++;
+        }
+      }
+
+      tentativasTotais++;
+      document.getElementById("contador_tentativas").innerText = `TENTATIVAS ${tentativasTotais}/7`;
+
+      if (corretos === 4) {
+        mostrarAviso("✅ Parabéns! Você colocou os ingredientes na ordem correta!");
+
+        // Animar ingredientes com curva
+        document.getElementById("op1_luz").classList.add("curva-direita");
+        document.getElementById("op2_luz").classList.add("curva-meio-direita");
+        document.getElementById("op3_luz").classList.add("curva-meio-esquerda");
+        document.getElementById("op4_luz").classList.add("curva-esquerda");
+        bloquearJogo();
+        setTimeout(function() {
+        window.location.href = 'vitoria.html';}, 1200); // Redireciona após 1.2 segundos (tempo da animação)
+      } else {
+        mostrarAviso(`OPS!COMBINACAO ERRADA.
+         ${corretos} INGREDIENTE(S) NA
+         POSIÇÃO CORRETA
+         ${4 - corretos} INGREDIENTE(S) NA
+         POSIÇÃO INCORRETA.`);
+      }
+
+      if ((tentativasTotais >= tentaivas) && corretos != 4) {
+        mostrarAviso("❌ Suas tentativas acabaram!Tente novamente.");
+        bloquearJogo();
+        setTimeout(function() {window.location.href = 'derrota.html';}, 1200);
+      }
+      
+  }
+  </script>
+</body>
+</html>

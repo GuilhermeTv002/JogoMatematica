@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pontuação</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-image: url("imagens/tela_pontuacao.png");
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+
+    #botao-seta {
+      width: 120px;
+      margin-left:75% ;
+      cursor: pointer;
+      
+    }
+    #botao-seta:hover {
+      transform: scale(1.05); /* E isso dá um leve efeito ao passar o mouse */
+    }
+  </style>
+</head>
+<body>
+  <img src="imagens/botao_seta.png" alt="voltar ao inicio" id="botao-seta">
+  
+  <script>
+    // Quando o botão for clicado
+    document.getElementById("botao-seta").onclick = function () {
+    window.location.href = "index.html";
+    // Exemplo: trocar de tela, carregar outro conteúdo etc.
+    };
+</script>
+</body>
+</html>

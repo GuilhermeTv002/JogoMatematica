@@ -6,24 +6,35 @@
   <title>Alquimia Suprema</title>
 
   <style>
-    #img1{
-      position: absolute;
-      top:265px;
-      left: 400px;
-      width: 260px;
+    #luz1,#luz2,#luz3{
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      top: 0;
+      left: 0;
     }
-    #img2{
+    #img1,#img2,#img3{
+      width: 320px;  
+      z-index: 10;
       position: absolute;
-      top: 120px;
-      width: 260px;
+      top: 4px;
+      left: 4px;
+      cursor: pointer;
     }
-    #img3{
+    #op1_luz,#op2_luz,#op3_luz{
       position: absolute;
-      top:290px;
-      right: 410px;
-      display: flex;
-      width: 260px;
-    }    
+      width: 360px;
+    
+    }
+    #op1_luz{
+      left: 270px ;
+    }
+    #op2_luz{
+      top: 10px ;
+    }
+    #op3_luz{
+      right: 270px ;
+    }
     #botao_misturar{
       width: 600px;
       cursor: pointer;
@@ -32,8 +43,9 @@
       display: flex;
       flex-flow: column;
       position: absolute;
-      top: 600px;
-      left: 760px;
+      bottom: 500px;
+      left:35%;
+     
     }
     body {
       background-image: url("imagens/tela_facil.png");
@@ -71,18 +83,18 @@
     } 
 
     #op1 {
-      top: 800px;
+      top: 700px;
       left: 230px;
     }
 
     #op2 {
-      left: 500px;
-      bottom: 100px;
+      left: 450px;
+      top: 800px;
     }
 
     #op3 {
-      right: 230px;
-      top: 800px;
+      right: 330px;
+      top: 700px;
     }
 
     #op1_bolha, #op2_bolha, #op3_bolha {
@@ -106,39 +118,131 @@
 
     #mensagem_aviso {
       position: fixed;
-      top: 50%;
+      top: 75%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background-color: rgba(30, 30, 30, 0.9);
+      background-color:rgba(139, 93, 216, 0.73);
       color: white;
       padding: 30px 40px;
-      border-radius: 15px;
-      font-size: 24px;
+      border-radius: 50px;
+      border-color: black;
       z-index: 9999;
       text-align: center;
       box-shadow: 0 0 15px #000;
+      border: 9px solid black;
     }
 
     #mensagem_aviso p {
+      opacity: 1;
+      font-size: 40px;
       margin: 0;
+      color: white;
     }
 
     #opcoes img.transparente {
       opacity: 0.5;
     }
+    @keyframes curva-para-caldeirao-esquerda {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        transform: translate(-420px, 100px) rotate(20deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-600px, 500px) scale(0.2);
+        opacity: 0;
+      }
+    }
+
+    @keyframes curva-para-caldeirao-meio {
+      0% {
+        transform: translate(0, 0);
+        opacity: 1;
+      }
+      50% {
+        transform: translate(0px, 150px);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(0px, 500px) scale(0.2);
+        opacity: 0;
+      }
+    }
+
+    @keyframes curva-para-caldeirao-direita {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        transform: translate(420px, 100px) rotate(-10deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(600px, 500px) scale(0.2);
+        opacity: 0;
+      }
+    }
+    .curva-esquerda {
+      animation: curva-para-caldeirao-esquerda 1.2s forwards ease-in-out;
+    }
+
+    .curva-meio {
+      animation: curva-para-caldeirao-meio 1.2s forwards ease-in-out;
+    } 
+    .curva-direita {
+      animation: curva-para-caldeirao-direita 1.2s forwards ease-in-out;
+    } 
+
+    .curva-esquerda, .curva-meio, .curva-direita {
+      animation-duration: 1.2s;
+      animation-fill-mode: forwards;
+      animation-timing-function: ease-in-out;
+      z-index: 100;
+      position: relative;
+    }
+
+
   </style>
 </head>
 <body>
   <header>
+    <button onclick="simularVitoria()" style="
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    ">
+      ⚙️ Testar Vitória
+    </button>
     <div id="div_header">
       <h1 id="contador_tentativas">TENTATIVAS 00/10</h1>
       <h1 id="contador_tempo">TEMPO 00:00</h1>
     </div>
 
     <div id="container_principal">
-      <img class="imagem-principal" id="img1" src="imagens/item_inicial.png">
-      <img class="imagem-principal" id="img2" src="imagens/item_inicial.png">
-      <img class="imagem-principal" id="img3" src="imagens/item_inicial.png">
+      <div id="op1_luz">
+        <img src="imagens/luz.png" alt="" id="luz1">
+        <img class="imagem-principal" id="img1" src="imagens/item_inicial.png">
+      </div>
+      <div id="op2_luz">  
+        <img src="imagens/luz.png" alt="" id="luz2">
+        <img class="imagem-principal" id="img2" src="imagens/item_inicial.png">
+      </div>    
+      <div id="op3_luz">
+        <img src="imagens/luz.png" alt="" id="luz3">
+        <img class="imagem-principal" id="img3" src="imagens/item_inicial.png">
+      </div>
     </div>
 
     <div id="opcoes">
@@ -159,7 +263,7 @@
     </div> 
 
     <div id="div_botao_msturar">
-      <img src="imagens/botao_misturar.png" onclick="verificarOrdem()" id="botao_misturar">
+      <img src="imagens/botao_misturar.png" onclick="verificarOrdemSePossivel()" id="botao_misturar">
     </div>
 
     <div id="mensagem_aviso" style="display:none;">
@@ -173,6 +277,12 @@
     let imagemSelecionada = null;
     let tentaivas = 10;
 
+    function verificarOrdemSePossivel() {
+      const aviso = document.getElementById("mensagem_aviso");
+      if (aviso.style.display === "none") {
+        verificarOrdem();
+      }
+    }
     const ingredientesDisponiveis = [
       "imagens/frasco_dente_de_morcego.png",
       "imagens/frasco_po_de_fada.png",
@@ -233,7 +343,17 @@
       botaoMisturar.onclick = null; // Desativa o botão
       botaoMisturar.style.cursor = "not-allowed"; // Visual: cursor proibido
     }
+    function simularVitoria() {
+      document.getElementById("op1_luz").classList.add("curva-direita");
+      document.getElementById("op2_luz").classList.add("curva-meio");
+      document.getElementById("op3_luz").classList.add("curva-esquerda");
+      bloquearJogo();
 
+      setTimeout(function() {
+        window.location.href = 'vitoria.html';
+      }, 1200); // Redireciona após 1.2 segundos (tempo da animação)
+    }
+    
     function verificarOrdem() {
       const atuais = [
         document.getElementById("img1").src,
@@ -253,14 +373,31 @@
 
       if (corretos === 3) {
         mostrarAviso("✅ Parabéns! Você colocou os ingredientes na ordem correta!");
+
+        // Animar ingredientes com curva
+        document.getElementById("op1_luz").classList.add("curva-direita");
+          document.getElementById("op2_luz").classList.add("curva-meio");
+          document.getElementById("op3_luz").classList.add("curva-esquerda");
+          bloquearJogo();
+
+          setTimeout(function() {
+            window.location.href = 'vitoria.html';
+          }, 1200); // Redireciona após 1.2 segundos (tempo da animação)
       } else {
-        mostrarAviso(`❌ ${corretos} ingrediente(s) estão corretos e ${3 - corretos} estão errados.`);
+        mostrarAviso(`OPS!COMBINACAO ERRADA.
+         ${corretos} INGREDIENTE(S) NA
+         POSIÇÃO CORRETA
+         ${3 - corretos} INGREDIENTE(S) NA
+         POSIÇÃO INCORRETA.`);
       }
 
-      if (tentativasTotais >= tentaivas) {
-        window.get
+      if ((tentativasTotais >= tentaivas) && corretos != 3) {
+        mostrarAviso("❌ Suas tentativas acabaram!Tente novamente.");
+        bloquearJogo();
+        setTimeout(function() {window.location.href = 'derrota.html';}, 1200);
       }
-    }
+      
+  }
   </script>
 </body>
 </html>
