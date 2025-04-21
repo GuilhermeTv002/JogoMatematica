@@ -1,40 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alquimia Suprema</title>
+
+  <style>
+    #img1{
+      position: absolute;
+      top:265px;
+      left: 400px;
+      width: 260px;
+    }
+    #img2{
+      position: absolute;
+      top: 120px;
+      width: 260px;
+    }
+    #img3{
+      position: absolute;
+      top:290px;
+      right: 410px;
+      display: flex;
+      width: 260px;
+    }    
+    #botao_misturar{
+      width: 600px;
+      cursor: pointer;
+    }
+    #div_botao_msturar{
+      display: flex;
+      flex-flow: column;
+      position: absolute;
+      top: 600px;
+      left: 760px;
+    }
+    body {
+      background-image: url("imagens/tela_facil.png");
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+    }
+
+    #div_header {
+      display: flex;
+      justify-content: space-between;
+      color: white;
+      margin-left: 8%;
+      margin-right: 8%;
+    }
+
+    .imagem-principal {
+      width: 260px;
+      cursor: pointer;
+      margin: 20px;
+    }
+
+    #container_principal {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    #op1, #op2, #op3 {
+      position: absolute;
+      width: 195px;
+      height: 195px;
+    } 
+
+    #op1 {
+      top: 800px;
+      left: 230px;
+    }
+
+    #op2 {
+      left: 500px;
+      bottom: 100px;
+    }
+
+    #op3 {
+      right: 230px;
+      top: 800px;
+    }
+
+    #op1_bolha, #op2_bolha, #op3_bolha {
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    #op1_ingrediente, #op2_ingrediente, #op3_ingrediente {
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+    }
+
+    #mensagem_aviso {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(30, 30, 30, 0.9);
+      color: white;
+      padding: 30px 40px;
+      border-radius: 15px;
+      font-size: 24px;
+      z-index: 9999;
+      text-align: center;
+      box-shadow: 0 0 15px #000;
+    }
+
+    #mensagem_aviso p {
+      margin: 0;
+    }
+
+    #opcoes img.transparente {
+      opacity: 0.5;
+    }
+  </style>
 </head>
 <body>
   <header>
+    <div id="div_header">
+      <h1 id="contador_tentativas">TENTATIVAS 00/10</h1>
+      <h1 id="contador_tempo">TEMPO 00:00</h1>
+    </div>
 
-    <div id="contador_tempo">00:00</div>
-    <h1 id="contador_tentativas"></h1>
+    <div id="container_principal">
+      <img class="imagem-principal" id="img1" src="imagens/item_inicial.png">
+      <img class="imagem-principal" id="img2" src="imagens/item_inicial.png">
+      <img class="imagem-principal" id="img3" src="imagens/item_inicial.png">
+    </div>
 
+    <div id="opcoes">
+      <div id="op1">
+        <img src="imagens/bolha.png" alt="Bolha" id="op1_bolha">
+        <img src="imagens/frasco_dente_de_morcego.png" onclick="selecionarIngrediente(this)" id="op1_ingrediente">
+      </div>
+      
+      <div id="op2">
+        <img src="imagens/bolha.png" alt="Bolha" id="op2_bolha">
+        <img src="imagens/frasco_po_de_fada.png" onclick="selecionarIngrediente(this)" id="op2_ingrediente">
+      </div>
+      
+      <div id="op3">
+        <img src="imagens/bolha.png" alt="Bolha" id="op3_bolha">
+        <img src="imagens/frasco_baba_de_dragao.png" onclick="selecionarIngrediente(this)" id="op3_ingrediente">
+      </div>
+    </div> 
+
+    <div id="div_botao_msturar">
+      <img src="imagens/botao_misturar.png" onclick="verificarOrdem()" id="botao_misturar">
+    </div>
+
+    <div id="mensagem_aviso" style="display:none;">
+      <p id="mensagem_texto"></p>
+    </div>
   </header>
 
-
   <script>
+    let segundos = 0;
+    let tentativasTotais = 0;
+    let imagemSelecionada = null;
+    let tentaivas = 10;
 
-  let segundos = 0;
+    const ingredientesDisponiveis = [
+      "imagens/frasco_dente_de_morcego.png",
+      "imagens/frasco_po_de_fada.png",
+      "imagens/frasco_baba_de_dragao.png"
+    ];
 
-  function atualizarContador() {
-    segundos++;
+    let ordemCorreta = [];
 
-    const minutos = Math.floor(segundos/60);
-    const segundosRestantes = segundos%60;
+    function atualizarContador() {
+      segundos++;
+      const minutos = Math.floor(segundos / 60);
+      const segundosRestantes = segundos % 60;
+      const formatoMinutos = minutos.toString().padStart(2, "0");
+      const formatoSegundos = segundosRestantes.toString().padStart(2, "0");
+      document.getElementById("contador_tempo").innerText = `TEMPO ${formatoMinutos}:${formatoSegundos}`;
+    }
+    setInterval(atualizarContador, 1000);
 
-    const formatoMinutos = minutos.toString().padStart(2, '0');
-    const formatoSegundos = segundosRestantes.toString().padStart(2, '0');
+    function gerarOrdemCorreta() {
+      ordemCorreta = [...ingredientesDisponiveis].sort(() => Math.random() - 0.5);
+      console.log("Ordem correta:", ordemCorreta); // para teste
+    }
+    gerarOrdemCorreta();
 
-    document.getElementById("contador_tempo").innerText = `${formatoMinutos}:${formatoSegundos}`;
-  }
+    function selecionarIngrediente(imagemClicada) {
+      document.querySelectorAll("#opcoes img").forEach(img => img.classList.remove("transparente"));
+      imagemSelecionada = imagemClicada;
+      imagemSelecionada.classList.add("transparente");
 
-  setInterval(atualizarContador, 1000);
+      const imagensPrincipais = document.querySelectorAll(".imagem-principal");
+      imagensPrincipais.forEach(img => {
+        img.onclick = function () {
+          if (imagemSelecionada) {
+            img.src = imagemSelecionada.src;
+            imagemSelecionada.classList.remove("transparente");
+            imagemSelecionada = null;
+            imagensPrincipais.forEach(i => i.onclick = null);
+          }
+        };
+      });
 
+      document.getElementById("mensagem_aviso").style.display = "none"; // esconde aviso ao clicar
+    }
 
+    function mostrarAviso(texto) {
+      const aviso = document.getElementById("mensagem_aviso");
+      const textoElemento = document.getElementById("mensagem_texto");
+      textoElemento.innerText = texto;
+      aviso.style.display = "block";
+    }
 
+    function bloquearJogo() {
+      const imagensPrincipais = document.querySelectorAll(".imagem-principal");
+      imagensPrincipais.forEach(img => img.onclick = null);
+      document.querySelectorAll("#opcoes img").forEach(img => img.onclick = null);
+
+      const botaoMisturar = document.getElementById("botao_misturar");
+      botaoMisturar.onclick = null; // Desativa o botão
+      botaoMisturar.style.cursor = "not-allowed"; // Visual: cursor proibido
+    }
+
+    function verificarOrdem() {
+      const atuais = [
+        document.getElementById("img1").src,
+        document.getElementById("img2").src,
+        document.getElementById("img3").src
+      ];
+
+      let corretos = 0;
+      for (let i = 0; i < ordemCorreta.length; i++) {
+        if (atuais[i].includes(ordemCorreta[i])) {
+          corretos++;
+        }
+      }
+
+      tentativasTotais++;
+      document.getElementById("contador_tentativas").innerText = `TENTATIVAS ${tentativasTotais}/10`;
+
+      if (corretos === 3) {
+        mostrarAviso("✅ Parabéns! Você colocou os ingredientes na ordem correta!");
+      } else {
+        mostrarAviso(`❌ ${corretos} ingrediente(s) estão corretos e ${3 - corretos} estão errados.`);
+      }
+
+      if (tentativasTotais >= tentaivas) {
+        window.get
+      }
+    }
   </script>
-
 </body>
 </html>
