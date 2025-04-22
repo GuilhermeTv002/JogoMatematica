@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    @font-face {
+        font-family: 'MinhaFonteBonita';
+        src: url('fonts/Nau Sea.otf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+    body{
+      background-image: url(imagens/tela_dificuldade_nome.png);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: 'MinhaFonteBonita';
+    }
+    #div_game_over{
+      position: absolute;
+      top: 100px;
+      color: white;
+      text-align: center;
+    }
+    #game_over{
+      font-size: 170px;
+    }
+    #btn_jogar_novamente{
+      font-family: 'MinhaFonteBonita';
+      font-size: 90px;
+      background-color: rgba(56, 15, 125, 0.5);
+      border: none;
+      color: white;
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+    
+    
+
+  </style>
+</head>
+<body>
+  <div id="div_game_over">
+    <p id="game_over">
+      GAME OVER
+    </p>
+    <button id="btn_jogar_novamente" onclick="window.location.href='index.html'">JOGAR NOVAMENTE</button>
+  </div>
+</body>
+</html>

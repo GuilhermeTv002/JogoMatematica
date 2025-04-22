@@ -237,21 +237,6 @@
   </style>
 </head>
   <header>
-    <button onclick="simularVitoria()" style="
-          position: fixed;
-          top: 20px;
-          right: 20px;
-          z-index: 9999;
-          padding: 10px 20px;
-          font-size: 18px;
-          background-color: #4CAF50;
-          color: white;
-          border: none;
-          border-radius: 10px;
-          cursor: pointer;
-        ">
-          ⚙️ Testar Vitória
-        </button>
     <body>
       <div id="div_header">
         <h1 id="contador_tentativas">TENTATIVAS 0/7</h1>
@@ -383,17 +368,6 @@
       botaoMisturar.onclick = null; // Desativa o botão
       botaoMisturar.style.cursor = "not-allowed"; // Visual: cursor proibido
     }
-    function simularVitoria() {
-      document.getElementById("op1_luz").classList.add("curva-direita");
-      document.getElementById("op2_luz").classList.add("curva-meio-direita");
-      document.getElementById("op3_luz").classList.add("curva-meio-esquerda");
-      document.getElementById("op4_luz").classList.add("curva-esquerda");
-      bloquearJogo();
-
-      setTimeout(function() {
-        window.location.href = 'vitoria.html';
-      }, 1200); // Redireciona após 1.2 segundos (tempo da animação)
-    }
     
     function verificarOrdem() {
       const atuais = [
@@ -414,6 +388,19 @@
       document.getElementById("contador_tentativas").innerText = `TENTATIVAS ${tentativasTotais}/7`;
 
       if (corretos === 4) {
+        const dados = JSON.parse(localStorage.getItem("dadosJogador")) || {};
+        const tempoFinal = segundos;
+
+        if (dados.nome && dados.dificuldade) {
+          const chave = `ranking_${dados.dificuldade}`;
+          let ranking = JSON.parse(localStorage.getItem(chave)) || [];
+
+          ranking.push({ nome: dados.nome, tempo: tempoFinal });
+          ranking.sort((a, b) => a.tempo - b.tempo);
+          ranking = ranking.slice(0, 5); // top 5
+
+          localStorage.setItem(chave, JSON.stringify(ranking));
+        }
         mostrarAviso("✅ Parabéns! Você colocou os ingredientes na ordem correta!");
 
         // Animar ingredientes com curva
@@ -434,6 +421,11 @@
 
       if ((tentativasTotais >= tentaivas) && corretos != 4) {
         mostrarAviso("❌ Suas tentativas acabaram!Tente novamente.");
+        // Animar ingredientes com curva
+        document.getElementById("op1_luz").classList.add("curva-direita");
+        document.getElementById("op2_luz").classList.add("curva-meio-direita");
+        document.getElementById("op3_luz").classList.add("curva-meio-esquerda");
+        document.getElementById("op4_luz").classList.add("curva-esquerda");
         bloquearJogo();
         setTimeout(function() {window.location.href = 'derrota.html';}, 1200);
       }
