@@ -290,7 +290,9 @@
       <div id="div_botao_msturar">
         <img src="imagens/botao_misturar.png" onclick="verificarOrdemSePossivel()" id="botao_misturar">
       </div>
-
+      <audio id="audioMisturar" src="audios/audio_de_mistura.mp3" preload="auto"></audio>
+      <audio id="audioBolhas" src="audios/bolhas.mp3" preload="auto"></audio>
+    
       <div id="mensagem_aviso" style="display:none;">
         <p id="mensagem_texto"></p>
       </div>
@@ -370,6 +372,9 @@
     }
     
     function verificarOrdem() {
+      const audio = document.getElementById("audioMisturar");
+      audio.currentTime = 0;
+      audio.play();
       const atuais = [
         document.getElementById("img1").src,
         document.getElementById("img2").src,
@@ -401,6 +406,9 @@
 
           localStorage.setItem(chave, JSON.stringify(ranking));
         }
+        const audioBolhas = document.getElementById("audioBolhas");
+        audioBolhas.currentTime = 0; // reinicia se estiver tocando
+        audioBolhas.play();
         mostrarAviso("✅ Parabéns! Você colocou os ingredientes na ordem correta!");
 
         // Animar ingredientes com curva
@@ -412,6 +420,9 @@
         setTimeout(function() {
         window.location.href = 'vitoria.html';}, 1200); // Redireciona após 1.2 segundos (tempo da animação)
       } else {
+        const audioBolhas = document.getElementById("audioBolhas");
+        audioBolhas.currentTime = 0; // reinicia se estiver tocando
+        audioBolhas.play();
         mostrarAviso(`OPS!COMBINACAO ERRADA.
          ${corretos} INGREDIENTE(S) NA
          POSIÇÃO CORRETA
@@ -420,6 +431,9 @@
       }
 
       if ((tentativasTotais >= tentaivas) && corretos != 4) {
+        const audioBolhas = document.getElementById("audioBolhas");
+        audioBolhas.currentTime = 0; // reinicia se estiver tocando
+        audioBolhas.play();
         mostrarAviso("❌ Suas tentativas acabaram!Tente novamente.");
         // Animar ingredientes com curva
         document.getElementById("op1_luz").classList.add("curva-direita");
